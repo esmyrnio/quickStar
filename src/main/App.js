@@ -6,7 +6,7 @@ class App extends React.Component {
   };
   render() {
     const { children } = this.props;
-    this.return(<div>{children}</div>);
+    return <div>{children}</div>;
   }
 }
 export default App;
