@@ -1,8 +1,4 @@
-import Navbar from "./Navbar.js";
-import Model from "./Model.js";
-import About from "./About.js";
-// import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import { GlobalStyle } from "../styles/Styles.js";
+import React from "react";
 
 class App extends React.Component {
   static propTypes = {
