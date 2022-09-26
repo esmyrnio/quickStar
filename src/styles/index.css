@@ -331,6 +331,7 @@ input::-webkit-inner-spin-button {
   margin-left: auto;
   margin-right: auto;
   margin-top: 100px;
+  height: 900px;
 }
 .pNS {
   color: #39a2db;
@@ -346,6 +347,9 @@ input::-webkit-inner-spin-button {
 
 .tov-equations {
   color: lightgray;
+}
+.link-to-app {
+  color: #ff6863;
 }
 /* .radiusWrapper {
   display: flex;
