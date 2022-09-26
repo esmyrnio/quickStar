@@ -23,6 +23,7 @@ input::-webkit-inner-spin-button {
   color: #39a2db;
   padding: 0px;
   margin-left: -10px;
+  font-size: 1.6rem;
 }
 .navbar .links {
   margin-left: auto;
@@ -33,6 +34,7 @@ input::-webkit-inner-spin-button {
   text-decoration: none;
   padding: 6px;
   color: #f2f2f2;
+  font-weight: 500;
 }
 .navbar a:hover {
   color: #39a2db;
