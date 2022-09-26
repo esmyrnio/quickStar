@@ -63,7 +63,7 @@ $$ \\lambda = -\\ln\\left(1-\\frac{2m}{r}\\right),$$`}</Latex>
         code, which is then in-lined into a ES6 JavaScript module. More
         information regarding the implementation of the TOV solver in C++, along
         with the App's source code can be found{" "}
-        <a className="link-to-app" href="https://github.com/esmyrnio">
+        <a className="link-to-app" href="https://github.com/esmyrnio/quickStar">
           {" "}
           here
         </a>
