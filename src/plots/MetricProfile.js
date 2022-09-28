@@ -62,8 +62,8 @@ class MetricProfile extends PureComponent {
           stroke="#39a2db"
           type="number"
           domain={[
-            (dataMin) => dataMin.toFixed(2),
-            (dataMax) => dataMax.toFixed(2),
+            (dataMin) => dataMin.toFixed(4),
+            (dataMax) => dataMax.toFixed(4),
           ]}
           tickCount={7}
         />
@@ -71,12 +71,7 @@ class MetricProfile extends PureComponent {
           content={this.CustomTooltip}
           wrapperStyle={{ outline: "none" }}
         />
-        <Line
-          type="monotone"
-          fill="#39a2db"
-          dataKey="metric"
-          stackOffset="sign"
-        />
+        <Line type="monotone" fill="#39a2db" dataKey="metric" />
       </LineChart>
     );
   }

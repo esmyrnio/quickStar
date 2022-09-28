@@ -91,7 +91,7 @@ export const tabulatedOptions = [
 
   { label: "Steiner et al. 2013 (SFHO)", value: "sfho.cold.rns1.1.txt" },
 
-  { label: "Marques et al. 1017 (SFHOY)", value: "sfhohyp.cold.rns1.1.txt" },
+  { label: "Marques et al. 2017 (SFHOY)", value: "sfhohyp.cold.rns1.1.txt" },
 
   { label: "Steiner et al. 2013 (SFHX)", value: "sfhx.cold.rns1.1.txt" },
 

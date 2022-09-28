@@ -41,7 +41,7 @@ $$ \\lambda = -\\ln\\left(1-\\frac{2m}{r}\\right),$$`}</Latex>
         <Latex className="latex" displayMode={true}>
           {`$$P = K\\rho^{\\Gamma},$$`}
         </Latex>
-        where the for central density holds{" "}
+        where for the density holds{" "}
         <Latex
           className="latex"
           displayMode={true}

@@ -2,7 +2,7 @@ import React, { PureComponent } from "react";
 import { LineChart, Line, XAxis, YAxis, Label, Tooltip } from "recharts";
 class PressureProfile extends PureComponent {
   DataFormater = (number) => {
-    number = number !== 0 ? number.toFixed(2) : number;
+    number = number !== 0 ? number.toFixed(3) : number;
     return number !== 0 ? number.toString() + "e-3" : number.toString();
   };
   CustomTooltip = ({ active, payload, label }) => {
@@ -67,8 +67,8 @@ class PressureProfile extends PureComponent {
           stroke="#39a2db"
           type="number"
           domain={[
-            (dataMin) => dataMin.toFixed(2),
-            (dataMax) => dataMax.toFixed(2),
+            (dataMin) => dataMin.toFixed(3),
+            (dataMax) => dataMax.toFixed(3),
           ]}
           tickCount={7}
         />

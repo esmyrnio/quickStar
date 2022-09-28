@@ -379,6 +379,7 @@ class Model extends React.Component {
                   (this.state.isPolyChecked &&
                     (this.state.Gamma.length === 0 ||
                       this.state.Kappa.length === 0 ||
+                      this.state.centralDensity.length === 0 ||
                       !this.state.GammaValid ||
                       !this.state.KappaValid))
                 }
