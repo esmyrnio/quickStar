@@ -64,7 +64,7 @@ class Model extends React.Component {
       () => {}
     );
   };
-  handleInputChange = (event, value) => {
+  handleInputChange = (event) => {
     this.setState({ [event.target.name]: event.target.value }, () => {
       this.validateField(event.target.name, event.target.value);
     });
