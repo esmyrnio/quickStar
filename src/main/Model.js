@@ -38,14 +38,11 @@ class Model extends React.Component {
       epsValid: true,
       KappaValid: true,
       GammaValid: true,
-      isTabVisible: true,
-      isPolyVisible: false,
       isTabChecked: true,
       isPolyChecked: false,
       isModuleLoaded: false,
       isModelComputed: false,
       MassRadiusData: [],
-      selected: "",
       mass: "-",
       radius: "-",
       massProfile: [],
@@ -67,64 +64,53 @@ class Model extends React.Component {
       () => {}
     );
   };
-  handleEpsChange = (event) => {
-    this.setState({ centralDensity: event.target.value }, () => {
-      this.validateEpsField(event.target.value);
+  handleInputChange = (event, value) => {
+    this.setState({ [event.target.name]: event.target.value }, () => {
+      this.validateField(event.target.name, event.target.value);
     });
   };
-  validateEpsField = (value) => {
-    const domainValid = this.state.isPolyChecked
-      ? value >= 0.35 && value <= 20.0
-      : value >= 0.35 && value <= 20.0;
+  validateField = (name, value) => {
+    var domainValid, validateInput, stateValue;
+    switch (name) {
+      case "centralDensity":
+        domainValid = value >= 0.35 && value <= 20.0;
+        validateInput = "epsValid";
+        stateValue = this.state.centralDensity;
+        break;
+      case "Kappa":
+        domainValid = value >= 50.0 && value <= 2000;
+        validateInput = "KappaValid";
+        stateValue = this.state.Kappa;
+        break;
+      case "Gamma":
+        domainValid = value >= 2.0 && value <= 3.0;
+        validateInput = "GammaValid";
+        stateValue = this.state.Gamma;
+        break;
+      default:
+        break;
+    }
     this.setState({
-      epsValid: this.state.centralDensity !== "" ? domainValid : "false",
+      [validateInput]: stateValue !== "" ? domainValid : "false",
     });
   };
-  handleKappaChange = (event) => {
-    this.setState({ Kappa: event.target.value }, () => {
-      this.validateKappaField(event.target.value);
-    });
-  };
-  validateKappaField = (value) => {
-    this.setState({
-      KappaValid:
-        this.state.Kappa !== "" ? value >= 50.0 && value <= 2000 : "false",
-    });
-  };
-  handleGammaChange = (event) => {
-    this.setState({ Gamma: event.target.value }, () => {
-      this.validateGammaField(event.target.value);
-    });
-  };
-  validateGammaField = (value) => {
-    this.setState({
-      GammaValid:
-        this.state.Gamma !== "" ? value >= 2.0 && value <= 3.0 : "false",
-    });
-  };
-  handleTabVisibility = (event) => {
-    this.setState(
-      {
-        select: event.target.value,
-        isTabChecked: true,
-        isPolyChecked: false,
-        isPolyVisible: false,
-        isTabVisible: true,
-      },
-      () => {}
-    );
-  };
-  handlePolyVisibility = (event) => {
-    this.setState(
-      {
-        select: event.target.value,
-        isTabChecked: false,
-        isPolyChecked: true,
-        isPolyVisible: true,
-        isTabVisible: false,
-      },
-      () => {}
-    );
+  triggerVisibility = (type) => {
+    switch (type) {
+      case "poly":
+        this.setState({
+          isTabChecked: false,
+          isPolyChecked: true,
+        });
+        break;
+      case "tab":
+        this.setState({
+          isTabChecked: true,
+          isPolyChecked: false,
+        });
+        break;
+      default:
+        break;
+    }
   };
   /* 
   main routine, which calls the Model costructor depending on which equation of state type is chose,
@@ -195,31 +181,18 @@ class Model extends React.Component {
       MassRadiusData: MassRadiusData,
     });
   };
-  onMouseEnterKappa = (e) => {
-    this.setState({ hoveredKappa: true });
+  onMouseEnter = (hovered) => {
+    this.setState({ [hovered]: true });
   };
-  onMouseLeaveKappa = (e) => {
-    this.setState({ hoveredKappa: false });
+  onMouseLeave = (hovered) => {
+    this.setState({ [hovered]: false });
   };
-  onMouseEnterGamma = (e) => {
-    this.setState({ hoveredGamma: true });
+  onFocus = (focused) => {
+    this.setState({ [focused]: true });
   };
-  onMouseLeaveGamma = (e) => {
-    this.setState({ hoveredGamma: false });
+  onFocusOut = (focused) => {
+    this.setState({ [focused]: false });
   };
-  onFocusKappa = (e) => {
-    this.setState({ focusedKappa: true });
-  };
-  onFocusOutKappa = (e) => {
-    this.setState({ focusedKappa: false });
-  };
-  onFocusGamma = (e) => {
-    this.setState({ focusedGamma: true });
-  };
-  onFocusOutGamma = (e) => {
-    this.setState({ focusedGamma: false });
-  };
-
   // loads ES6 module immediately after Model is mounted
   componentDidMount() {
     this.loadModule();
@@ -235,7 +208,7 @@ class Model extends React.Component {
               name="radioEos"
               value="Tabulated"
               checked={this.state.isTabChecked}
-              onChange={(event) => this.handleTabVisibility(event)}
+              onChange={() => this.triggerVisibility("tab")}
             />
             <label className="tab" htmlFor="radioTab">
               Tabulated
@@ -245,7 +218,7 @@ class Model extends React.Component {
               id="radioPoly"
               name="radioEos"
               value="Polytropic"
-              onChange={(event) => this.handlePolyVisibility(event)}
+              onChange={() => this.triggerVisibility("poly")}
             />
             <label className="poly" htmlFor="radioPoly">
               Polytrope
@@ -253,7 +226,7 @@ class Model extends React.Component {
           </div>
           <StyledForm onSubmit={this.handleCompute}>
             <label className="labelEos">Equation Of State : </label>
-            {this.state.isTabVisible && (
+            {this.state.isTabChecked && (
               <Select
                 components={{
                   DropdownIndicator: () => null,
@@ -274,7 +247,7 @@ class Model extends React.Component {
                 display="none"
               />
             )}
-            {this.state.isPolyVisible && (
+            {this.state.isPolyCheckedble && (
               <StyledPolyInputWrapper>
                 <StyledPolyInputFieldSetKappa
                   hovered={this.state.hoveredKappa}
@@ -287,17 +260,17 @@ class Model extends React.Component {
                   <StyledPolyInputLegendKappa>Kappa</StyledPolyInputLegendKappa>
                 </StyledPolyInputFieldSetKappa>
                 <StyledPolyInputKappa
-                  onMouseEnter={this.onMouseEnterKappa}
-                  onMouseLeave={this.onMouseLeaveKappa}
-                  onFocus={this.onFocusKappa}
-                  onBlur={this.onFocusOutKappa}
+                  onMouseEnter={() => this.onMouseEnter("hoveredKappa")}
+                  onMouseLeave={() => this.onMouseLeave("hoveredKappa")}
+                  onFocus={() => this.onFocus("focusedKappa")}
+                  onBlur={() => this.onFocusOut("focusedKappa")}
                   float={"left"}
                   inputValid={this.state.KappaValid}
                   value={this.state.Kappa}
                   name="Kappa"
                   type="number"
                   autoComplete="off"
-                  onChange={(event) => this.handleKappaChange(event)}
+                  onChange={(event) => this.handleInputChange(event)}
                 />
                 {!this.state.KappaValid && this.state.Kappa !== "" && (
                   <p className="kappaMsg"> range: [50,2000] </p>
@@ -313,17 +286,17 @@ class Model extends React.Component {
                   <StyledPolyInputLegendGamma>Gamma</StyledPolyInputLegendGamma>
                 </StyledPolyInputFieldSetGamma>
                 <StyledPolyInputGamma
-                  onMouseEnter={this.onMouseEnterGamma}
-                  onMouseLeave={this.onMouseLeaveGamma}
-                  onFocus={this.onFocusGamma}
-                  onBlur={this.onFocusOutGamma}
+                  onMouseEnter={() => this.onMouseEnter("hoveredGamma")}
+                  onMouseLeave={() => this.onMouseLeave("hoveredGamma")}
+                  onFocus={() => this.onFocus("focusedGamma")}
+                  onBlur={() => this.onFocusOut("focusedGamma")}
                   focused={this.state.focusedGamma}
                   float={"left"}
                   value={this.state.Gamma}
                   name="Gamma"
                   type="number"
                   autoComplete="off"
-                  onChange={(event) => this.handleGammaChange(event)}
+                  onChange={(event) => this.handleInputChange(event)}
                 />
                 {!this.state.GammaValid && this.state.Gamma !== "" && (
                   <p className="gammaMsg"> range: [2.0,3.0] </p>
@@ -341,7 +314,7 @@ class Model extends React.Component {
               type="number"
               value={this.state.centralDensity}
               autoComplete="off"
-              onChange={(event) => this.handleEpsChange(event)}
+              onChange={(event) => this.handleInputChange(event)}
             />
             {!this.state.epsValid && this.state.centralDensity !== "" && (
               <span className="span-warning">
