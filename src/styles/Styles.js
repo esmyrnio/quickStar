@@ -75,7 +75,15 @@ export const selectStyles = {
       background: "#555",
     },
   }),
-
+  placeholder: (defaultStyles, selectProps) => {
+    return {
+      ...defaultStyles,
+      color:
+        selectProps.selectProps.selectProps.eos !== "" ? "#39a2db" : "grey",
+      fontWeight:
+        selectProps.selectProps.selectProps.eos !== "" ? "900" : "700",
+    };
+  },
   option: (provided, state) => ({
     ...provided,
     textAlign: "center",

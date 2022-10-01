@@ -27,6 +27,7 @@ class Model extends React.Component {
       module: undefined,
       centralDensity: "",
       equationOfState: "",
+      equationOfStateLabel: "",
       Kappa: "",
       Gamma: "",
       equationOfStateOptions: [],
@@ -58,20 +59,14 @@ class Model extends React.Component {
 
   async loadModule() {
     const module = await createModule();
-    // const eosOptions = [];
-    // const path = "/EoS/";
-    // for (const name of module.FS.readdir(path)) {
-    //   if (name === "." || name === "..") continue;
-    //   eosOptions.push({
-    //     label: name.slice(0, name.indexOf(".")),
-    //     value: name,
-    //   });
-    // }
     this.setState({ module: module, isModuleLoaded: true });
   }
 
   handleEosChange = (event) => {
-    this.setState({ equationOfState: event.value }, () => {});
+    this.setState(
+      { equationOfState: event.value, equationOfStateLabel: event.label },
+      () => {}
+    );
   };
 
   handleEpsChange = (event) => {
@@ -276,7 +271,12 @@ class Model extends React.Component {
                   DropdownIndicator: () => null,
                   IndicatorSeparator: () => null,
                 }}
-                placeholder="select EoS..."
+                selectProps={{ eos: this.state.equationOfState }}
+                placeholder={
+                  this.state.equationOfState !== ""
+                    ? this.state.equationOfStateLabel
+                    : "select EoS..."
+                }
                 name="equationOfState"
                 className="react-select"
                 classNamePrefix="react-select"
