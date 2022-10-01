@@ -56,19 +56,17 @@ class Model extends React.Component {
       solutionData: {},
     };
   }
-
+  // Load ES6 module
   async loadModule() {
     const module = await createModule();
     this.setState({ module: module, isModuleLoaded: true });
   }
-
   handleEosChange = (event) => {
     this.setState(
       { equationOfState: event.value, equationOfStateLabel: event.label },
       () => {}
     );
   };
-
   handleEpsChange = (event) => {
     this.setState({ centralDensity: event.target.value }, () => {
       this.validateEpsField(event.target.value);
@@ -82,33 +80,28 @@ class Model extends React.Component {
       epsValid: this.state.centralDensity !== "" ? domainValid : "false",
     });
   };
-
   handleKappaChange = (event) => {
     this.setState({ Kappa: event.target.value }, () => {
       this.validateKappaField(event.target.value);
     });
   };
-
   validateKappaField = (value) => {
     this.setState({
       KappaValid:
         this.state.Kappa !== "" ? value >= 50.0 && value <= 2000 : "false",
     });
   };
-
   handleGammaChange = (event) => {
     this.setState({ Gamma: event.target.value }, () => {
       this.validateGammaField(event.target.value);
     });
   };
-
   validateGammaField = (value) => {
     this.setState({
       GammaValid:
         this.state.Gamma !== "" ? value >= 2.0 && value <= 3.0 : "false",
     });
   };
-
   handleTabVisibility = (event) => {
     this.setState(
       {
@@ -121,7 +114,6 @@ class Model extends React.Component {
       () => {}
     );
   };
-
   handlePolyVisibility = (event) => {
     this.setState(
       {
@@ -134,10 +126,14 @@ class Model extends React.Component {
       () => {}
     );
   };
-
+  /* 
+  main routine, which calls the Model costructor depending on which equation of state type is chose,
+  Computes the star's gravitational mass, radius, solution profile, as well as a sequence of star models for the given EoS. 
+  */
   handleCompute = (event) => {
     event.preventDefault();
     const module = this.state.module;
+    // The TOV solver is invoked inside the Model constructor.
     const model = this.state.isTabChecked
       ? new module.Model(this.state.equationOfState, this.state.centralDensity)
       : new module.Model(
@@ -145,21 +141,19 @@ class Model extends React.Component {
           this.state.Gamma,
           this.state.centralDensity
         );
-
+    // Store the solution vectors.
     const massVector = model.returnMassProfile();
     const radiusVector = model.returnRadiusProfile();
     const metricVector = model.returnMetricProfile();
     const densityVector = model.returnDensityProfile();
     const pressureVector = model.returnPressureProfile();
-
     const mass = model.mass;
     const radius = model.radius;
-    const G = 6.6732e-8;
-    const MSUN = 1.989e33;
-    const C = 2.9979e10;
-    const Length = (G * MSUN) / Math.pow(C, 2);
-
-    const solutionData = [];
+    const G = 6.6732e-8; // Newton's Gravitational Constant in CGS units.
+    const MSUN = 1.989e33; // Sun's gravitational mass in CGS units.
+    const C = 2.9979e10; // Speed of light in CGS units.
+    const Length = (G * MSUN) / Math.pow(C, 2); // Lenth unit in CGS units.
+    const solutionData = []; // this will be the solution array which will be passed to child components.
     for (let i = 0; i < massVector.size(); i++) {
       let solution = {};
       if (i % 100 === 0 || i === massVector.size() - 1) {
@@ -171,7 +165,7 @@ class Model extends React.Component {
         solutionData.push(solution);
       }
     }
-    const MassRadiusData = [];
+    const MassRadiusData = []; // here we store the sequence of star models to be computed for the Mass & Radius plot.
     let logspace = require("logspace");
     let centralDensities = logspace(Math.log10(0.35), Math.log10(20.0), 50);
     for (let i = 0; i < centralDensities.length; i++) {
@@ -213,28 +207,24 @@ class Model extends React.Component {
   onMouseLeaveGamma = (e) => {
     this.setState({ hoveredGamma: false });
   };
-
   onFocusKappa = (e) => {
     this.setState({ focusedKappa: true });
   };
   onFocusOutKappa = (e) => {
     this.setState({ focusedKappa: false });
   };
-
   onFocusGamma = (e) => {
     this.setState({ focusedGamma: true });
   };
   onFocusOutGamma = (e) => {
     this.setState({ focusedGamma: false });
   };
+
+  // loads ES6 module immediately after Model is mounted
   componentDidMount() {
     this.loadModule();
   }
-
   render() {
-    // const epsMsg = this.state.isPolyChecked
-    //   ? "value must be between 0.35 and 20.0"
-    //   : "value must be between 0.5 and 10.0";
     return (
       <>
         <StyledFormWrapper>
@@ -250,7 +240,6 @@ class Model extends React.Component {
             <label className="tab" htmlFor="radioTab">
               Tabulated
             </label>
-
             <input
               type="radio"
               id="radioPoly"
@@ -258,7 +247,6 @@ class Model extends React.Component {
               value="Polytropic"
               onChange={(event) => this.handlePolyVisibility(event)}
             />
-
             <label className="poly" htmlFor="radioPoly">
               Polytrope
             </label>
@@ -294,12 +282,10 @@ class Model extends React.Component {
                   inputValid={this.state.KappaValid}
                   focused={this.state.focusedKappa}
                   value={this.state.Kappa}
-
                   // placeholder="central density in 10^15 x gr/cm^3"
                 >
                   <StyledPolyInputLegendKappa>Kappa</StyledPolyInputLegendKappa>
                 </StyledPolyInputFieldSetKappa>
-
                 <StyledPolyInputKappa
                   onMouseEnter={this.onMouseEnterKappa}
                   onMouseLeave={this.onMouseLeaveKappa}
@@ -326,7 +312,6 @@ class Model extends React.Component {
                 >
                   <StyledPolyInputLegendGamma>Gamma</StyledPolyInputLegendGamma>
                 </StyledPolyInputFieldSetGamma>
-
                 <StyledPolyInputGamma
                   onMouseEnter={this.onMouseEnterGamma}
                   onMouseLeave={this.onMouseLeaveGamma}
@@ -358,14 +343,12 @@ class Model extends React.Component {
               autoComplete="off"
               onChange={(event) => this.handleEpsChange(event)}
             />
-
             {!this.state.epsValid && this.state.centralDensity !== "" && (
               <span className="span-warning">
                 {" "}
                 value must be between 0.35 and 20.0{" "}
               </span>
             )}
-
             <StyledButtonWrapper>
               <StyledButton
                 type="submit"
