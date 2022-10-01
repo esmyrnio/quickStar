@@ -70,20 +70,20 @@ class Model extends React.Component {
     });
   };
   validateField = (name, value) => {
-    var domainValid, validateInput, stateValue;
+    var validDomain, validateInput, stateValue;
     switch (name) {
       case "centralDensity":
-        domainValid = value >= 0.35 && value <= 20.0;
+        validDomain = value >= 0.35 && value <= 20.0;
         validateInput = "epsValid";
         stateValue = this.state.centralDensity;
         break;
       case "Kappa":
-        domainValid = value >= 50.0 && value <= 2000;
+        validDomain = value >= 50.0 && value <= 2000;
         validateInput = "KappaValid";
         stateValue = this.state.Kappa;
         break;
       case "Gamma":
-        domainValid = value >= 2.0 && value <= 3.0;
+        validDomain = value >= 2.0 && value <= 3.0;
         validateInput = "GammaValid";
         stateValue = this.state.Gamma;
         break;
@@ -91,7 +91,7 @@ class Model extends React.Component {
         break;
     }
     this.setState({
-      [validateInput]: stateValue !== "" ? domainValid : "false",
+      [validateInput]: stateValue !== "" ? validDomain : "false",
     });
   };
   triggerVisibility = (type) => {
