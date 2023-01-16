@@ -13,7 +13,6 @@ class MassRadiusPlot extends PureComponent {
   CustomizedDot = ({ cx, cy, payload }) => {
     const MassAndRadius = this.props.MassAndRadius;
     if (payload && payload.length) {
-      console.log("HIII");
       if (payload[0].payload.modelMass === MassAndRadius["mass"]) {
         return (
           <svg
